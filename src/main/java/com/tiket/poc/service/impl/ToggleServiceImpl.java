@@ -17,7 +17,7 @@ public class ToggleServiceImpl implements ToggleService {
 
   @Override
   public Mono<String> getAll() {
-    return redisOperations.opsForValue().get("foo")
+    return redisOperations.opsForValue().get("fee")
         .map(Object::toString)
         .defaultIfEmpty("toggle");
   }
