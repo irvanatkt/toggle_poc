@@ -5,7 +5,11 @@ import reactor.core.publisher.Mono;
 
 public interface ToggleService {
 
-  Mono<String> getAll();
+  Mono<Boolean> getKey(String key);
 
   Mono<Void> addToggle(CreateToggleRequest request);
+
+  Mono<Boolean> updateToggle(CreateToggleRequest request);
+
+  Mono<Void> deleteToggle(String key);
 }

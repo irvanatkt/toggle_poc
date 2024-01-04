@@ -16,15 +16,32 @@ public class ToggleServiceImpl implements ToggleService {
   ReactiveRedisOperations<String, Object> redisOperations;
 
   @Override
-  public Mono<String> getAll() {
-    return redisOperations.opsForValue().get("foo")
+  public Mono<Boolean> getKey(String key) {
+    return redisOperations.opsForValue().get(key)
         .map(Object::toString)
-        .defaultIfEmpty("toggle");
+        .map(Boolean::parseBoolean)
+        .defaultIfEmpty(Boolean.FALSE);
   }
 
   @Override
   public Mono<Void> addToggle(CreateToggleRequest request) {
     return redisOperations.opsForValue()
-        .set(request.getKey(), request.isActive(), Duration.ofSeconds(0)).then();
+        .setIfAbsent(request.getKey(), request.isActive()).then();
+  }
+
+  @Override
+  public Mono<Boolean> updateToggle(CreateToggleRequest request) {
+    return redisOperations.opsForValue()
+        .getAndSet(request.getKey(), request.isActive())
+        .map(Object::toString)
+        .map(Boolean::parseBoolean)
+        .onErrorResume(err -> Mono.just(Boolean.FALSE));
+  }
+
+  @Override
+  public Mono<Void> deleteToggle(String key) {
+    return redisOperations.opsForValue()
+        .getAndDelete(key)
+        .then();
   }
 }

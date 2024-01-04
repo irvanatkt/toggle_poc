@@ -29,6 +29,9 @@ public class ToggleRedisConfiguration implements ToggleClientService {
 
   @Override
   public Mono<Boolean> isActive(String key) {
-    return reactiveRedisTemplate.opsForValue().get(key);
+    return reactiveRedisTemplate.opsForValue().get(key)
+        .map(Object::toString)
+        .map(Boolean::parseBoolean)
+        .defaultIfEmpty(Boolean.FALSE);
   }
 }
