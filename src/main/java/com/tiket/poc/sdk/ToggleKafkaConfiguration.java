@@ -29,6 +29,7 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
   public ToggleKafkaConfiguration(long fetchInterval) {
     this.fetchInterval = fetchInterval;
 
+    initConsumerConfig();
     initToggleMap();
   }
 
@@ -46,7 +47,7 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
   }
 
   @PreDestroy
-  private void disconnect(){
+  private void disconnect() {
 
   }
 
@@ -62,4 +63,13 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
    */
   private void initToggleMap() {
   }
+
+  /**
+   * - every service pod has unique consumer group
+   * - new joiner consumer should only consume latest committed offset
+   */
+  private void initConsumerConfig() {
+//    props.put(ConsumerConfig.GROUP_ID_CONFIG, "vertical+podId");
+  }
+
 }
