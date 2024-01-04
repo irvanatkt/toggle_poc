@@ -2,12 +2,12 @@ package com.tiket.poc.sdk;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
-import java.time.Duration;
-import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 
@@ -15,9 +15,10 @@ import reactor.kafka.receiver.KafkaReceiver;
 @ConditionalOnBean(ToggleKafkaConfiguration.class)
 public class ToggleKafkaConfiguration implements ToggleClientService {
 
-  private Map<String, Boolean> toggleMap;
+  private ConcurrentHashMap<String, Boolean> toggleMap;
   private final long fetchInterval;
   private KafkaReceiver<String, String> kafkaReceiver;
+  private WebClient webClient;
 
   /*
   Self inject to provide schedule rate
@@ -27,6 +28,8 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
 
   public ToggleKafkaConfiguration(long fetchInterval) {
     this.fetchInterval = fetchInterval;
+
+    initToggleMap();
   }
 
   @Override
@@ -34,6 +37,9 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
     return Mono.just(toggleMap.getOrDefault(key, false));
   }
 
+  /**
+   * consume and update toggleMap
+   */
   @PostConstruct
   public void runKafkaListener() {
     kafkaReceiver.receive().retry().subscribe();
@@ -44,8 +50,16 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
 
   }
 
+  /**
+   * calling toggle service periodically to check current version & update if version if different
+   */
   @Scheduled(fixedDelayString = "#{@toggleKafkaConfiguration.fetchInterval}")
   public void runScheduler() {
-    // Scheduler logic
+  }
+
+  /**
+   * initiate toggleMap by call toggle-service endpoint
+   */
+  private void initToggleMap() {
   }
 }

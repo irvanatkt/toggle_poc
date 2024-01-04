@@ -1,5 +1,7 @@
 package com.tiket.poc.sdk;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.ReactiveRedisConnectionFactory;
 import org.springframework.data.redis.core.ReactiveRedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -7,6 +9,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import reactor.core.publisher.Mono;
 
+@Configuration
+@ConditionalOnBean(ToggleRedisConfiguration.class)
 public class ToggleRedisConfiguration implements ToggleClientService {
 
   private ReactiveRedisTemplate<String, Boolean> reactiveRedisTemplate;
