@@ -10,4 +10,6 @@ public interface ToggleService {
   Mono<Void> addToggle(CreateToggleRequest request);
 
   Mono<Boolean> updateToggle(CreateToggleRequest request);
+
+  Mono<Void> deleteToggle(String key);
 }

@@ -4,6 +4,7 @@ import com.tiket.poc.model.CreateToggleRequest;
 import com.tiket.poc.model.CreateToggleResponse;
 import com.tiket.poc.service.ToggleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,6 +42,13 @@ public class ToggleController {
           }
           return CreateToggleResponse.builder().status("FAILED").build();
         })
+        .onErrorResume(err -> Mono.just(CreateToggleResponse.builder().status("FAILED").build()));
+  }
+
+  @DeleteMapping
+  public Mono<CreateToggleResponse> deleteToggle(@RequestParam String key) {
+    return toggleService.deleteToggle(key)
+        .map(val -> CreateToggleResponse.builder().status("SUCCESS").build())
         .onErrorResume(err -> Mono.just(CreateToggleResponse.builder().status("FAILED").build()));
   }
 }

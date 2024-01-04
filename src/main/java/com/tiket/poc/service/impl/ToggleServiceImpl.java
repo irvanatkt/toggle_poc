@@ -37,4 +37,11 @@ public class ToggleServiceImpl implements ToggleService {
         .map(Boolean::parseBoolean)
         .onErrorResume(err -> Mono.just(Boolean.FALSE));
   }
+
+  @Override
+  public Mono<Void> deleteToggle(String key) {
+    return redisOperations.opsForValue()
+        .getAndDelete(key)
+        .then();
+  }
 }
