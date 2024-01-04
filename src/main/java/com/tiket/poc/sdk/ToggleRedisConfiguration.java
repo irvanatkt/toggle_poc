@@ -9,8 +9,8 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import reactor.core.publisher.Mono;
 
-@Configuration
-@ConditionalOnBean(ToggleRedisConfiguration.class)
+//@Configuration
+//@ConditionalOnBean(ToggleRedisConfiguration.class)
 public class ToggleRedisConfiguration implements ToggleClientService {
 
   private ReactiveRedisTemplate<String, Boolean> reactiveRedisTemplate;
