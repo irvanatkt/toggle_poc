@@ -1,8 +1,8 @@
 package com.tiket.poc.sdk;
 
-import jakarta.annotation.PostConstruct;
-import jakarta.annotation.PreDestroy;
 import java.util.concurrent.ConcurrentHashMap;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Configuration;
@@ -11,8 +11,8 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.kafka.receiver.KafkaReceiver;
 
-@Configuration
-@ConditionalOnBean(ToggleKafkaConfiguration.class)
+//@Configuration
+//@ConditionalOnBean(ToggleKafkaConfiguration.class)
 public class ToggleKafkaConfiguration implements ToggleClientService {
 
   private ConcurrentHashMap<String, Boolean> toggleMap;
@@ -23,8 +23,8 @@ public class ToggleKafkaConfiguration implements ToggleClientService {
   /*
   Self inject to provide schedule rate
    */
-  @Autowired
-  private ToggleKafkaConfiguration toggleKafkaConfiguration;
+//  @Autowired
+//  private ToggleKafkaConfiguration toggleKafkaConfiguration;
 
   public ToggleKafkaConfiguration(long fetchInterval) {
     this.fetchInterval = fetchInterval;
